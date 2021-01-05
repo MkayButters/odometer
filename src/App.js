@@ -1,25 +1,64 @@
-import logo from './logo.svg';
+import React from 'react'
 import './App.css';
 
-function App() {
+class App extends React.Component {
+      constructor(props){
+      super(props);      
+      this.state = {
+          odometerValue: 0
+    }
+    this.addsOnClicked = this.addsOnClicked.bind(this);
+  }
+
+  addsOnClicked(num) {
+    //          9998             +   1000 =      0998
+    //^Current odometer value^       ^num^ = ^new Odo Value^
+    let newOdometerValue = this.state.odometerValue + num
+    if (newOdometerValue > 9999) {
+      newOdometerValue -= 10000
+    }
+    this.setState({
+      odometerValue: newOdometerValue
+    });
+  }
+  render() {
+    return (
+      <div className="Odometer">
+        <Header title="1,10,100,1000" />
+        <Main numero={this.state.odometerValue} />
+        <button onClick={() => this.addsOnClicked(1)}>Plus One</button>
+        <button onClick={() => this.addsOnClicked(10)}>Plus Ten</button>
+        <button onClick={() => this.addsOnClicked(100)}>Plus One Hunded</button>
+        <button onClick={() => this.addsOnClicked(1000)}>Plus One Thousand</button>
+        <Footer message="React.js Odometer" />
+      </div>
+    );
+  }
+}
+
+function Header(props) {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+      <nav>
+          <h2>{props.title}</h2>
+      </nav>
+  )
+}
+
+function Main(props) {
+  return (
+      <>
+        <h1>Odometer</h1>
+        <p>{props.numero.toString().padStart(4, "0")}</p>
+      </>
+  )
+}
+
+function Footer(props) {
+    return (
+        <footer>
+            <p>{props.message}</p>
+        </footer>
+    )
 }
 
 export default App;
